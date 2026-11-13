@@ -44,7 +44,7 @@ export async function POST(request: Request) {
 
     const inquiry = rows[0] as Record<string, unknown>;
 
-    const messageText = [
+    const text = [
       "🚀 New CodeCraft Studio Inquiry",
       `Inquiry: #${inquiry.id}`,
       `Name: ${inquiry.name}`,
@@ -62,7 +62,7 @@ export async function POST(request: Request) {
     };
 
     try {
-      notification = await sendInquiryNotification(messageText);
+      notification = await sendInquiryNotification(text);
     } catch (error) {
       notification = {
         sent: false,

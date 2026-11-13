@@ -67,7 +67,7 @@ button, input, textarea, select { font: inherit; }
 .page-hero { padding:65px 0; background:linear-gradient(135deg,#07152d,#12366e); color:white; }
 .page-hero h1 { margin:12px 0; font-size:clamp(34px,5vw,52px); letter-spacing:-.05em; }
 .page-hero p { color:#c6d6ef; max-width:680px; line-height:1.7; }
-.contact-layout { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(260px,.6fr); gap:40px; align-items:start; }\n.form { display:grid; gap:15px; max-width:720px; }
+.form { display:grid; gap:15px; max-width:720px; }
 .field { display:grid; gap:7px; }
 .field label { font-size:13px; font-weight:700; color:var(--navy); }
 .field input,.field textarea,.field select { width:100%; border:1px solid #cbd5e1; border-radius:11px; padding:12px 13px; background:white; outline:none; }
@@ -92,7 +92,7 @@ button, input, textarea, select { font: inherit; }
  .hero-grid { grid-template-columns:1fr; }
  .cards,.project-grid { grid-template-columns:1fr 1fr; }
  .steps { grid-template-columns:1fr 1fr; }
- .admin-layout { grid-template-columns:1fr; }\n .contact-layout { grid-template-columns:1fr; gap:24px; }
+ .admin-layout { grid-template-columns:1fr; }
  .cta { align-items:flex-start; flex-direction:column; padding:30px; }
 }
 @media (max-width:540px) {
