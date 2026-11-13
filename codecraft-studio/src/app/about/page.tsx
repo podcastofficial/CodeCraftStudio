@@ -1,0 +1,7 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+export const metadata: Metadata = { title: "About" };
+export default function AboutPage() {
+  return <><section className="page-hero"><div className="container"><div className="eyebrow">About CodeCraft Studio</div><h1>Thoughtful development. Practical digital products.</h1><p>We help turn ideas into websites, Telegram experiences and custom software.</p></div></section>
+    <section className="section"><div className="container" style={{maxWidth:850}}><h2>Our approach</h2><p style={{color:"#64748b",lineHeight:1.9}}>CodeCraft Studio is focused on building useful digital experiences with clear communication, carefully defined requirements and iterative delivery. Each project begins with understanding the problem before selecting the right technical approach.</p><div className="cards"><div className="card"><h3>Clarity</h3><p>Define scope, assumptions and deliverables before development.</p></div><div className="card"><h3>Craft</h3><p>Build responsive, maintainable and user-friendly experiences.</p></div><div className="card"><h3>Reliability</h3><p>Test key workflows and communicate limitations honestly.</p></div></div><p style={{marginTop:30}}><Link className="btn" href="/contact">Start a conversation ↗</Link></p></div></section></>;
+}
