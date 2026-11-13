@@ -6,7 +6,9 @@ export const inquirySchema = z.object({
   project_type: z.string().trim().min(2).max(100),
   budget: z.string().trim().max(100).optional().or(z.literal("")),
   message: z.string().trim().min(10).max(4000),
-  website: z.string().optional() // honeypot: must remain empty
+  source: z.enum(["website", "telegram_miniapp"]).optional(),
+  initData: z.string().max(10000).optional(),
+  website: z.string().optional()
 });
 
 export const loginSchema = z.object({

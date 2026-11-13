@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { inquirySchema } from "@/lib/validation";
 import { getSql } from "@/lib/db";
 import { sendInquiryNotification } from "@/lib/telegram";
+import { verifyTelegramInitData } from "@/lib/telegram-auth";
 
 export const runtime = "nodejs";
 
@@ -9,44 +10,36 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const parsed = inquirySchema.safeParse(body);
+    if (!parsed.success) return NextResponse.json({ error: "Please check the form fields and try again." }, { status: 400 });
+    if (parsed.data.website) return NextResponse.json({ ok: true });
 
-    if (!parsed.success) {
-      return NextResponse.json(
-        { error: "Please check the form fields and try again." },
-        { status: 400 }
-      );
-    }
-
-    if (parsed.data.website) {
-      return NextResponse.json({ ok: true });
+    const telegramIdentity = verifyTelegramInitData(parsed.data.initData || "");
+    if (parsed.data.initData && !telegramIdentity) {
+      return NextResponse.json({ error: "Telegram session could not be verified. Please reopen the Mini App and try again." }, { status: 401 });
     }
 
     const data = parsed.data;
+    const source = data.source === "telegram_miniapp" ? "telegram_miniapp" : "website";
+    const telegramUsername = telegramIdentity?.username
+      ? `@${telegramIdentity.username}`
+      : (data.telegram_username || null);
     const sql = getSql();
-
     const rows = await sql`
       INSERT INTO inquiries (
-        name,
-        telegram_username,
-        project_type,
-        budget,
-        message
+        name, telegram_username, project_type, budget, message,
+        source, telegram_user_id, telegram_first_name
       )
       VALUES (
-        ${data.name},
-        ${data.telegram_username || null},
-        ${data.project_type},
-        ${data.budget || null},
-        ${data.message}
+        ${data.name}, ${telegramUsername}, ${data.project_type}, ${data.budget || null}, ${data.message},
+        ${source}, ${telegramIdentity?.id || null}, ${telegramIdentity?.first_name || null}
       )
-      RETURNING id, name, telegram_username, project_type, budget, message, created_at
+      RETURNING id, name, telegram_username, project_type, budget, message, source, created_at
     `;
-
     const inquiry = rows[0] as Record<string, unknown>;
-
-    const text = [
+    const messageText = [
       "🚀 New CodeCraft Studio Inquiry",
       `Inquiry: #${inquiry.id}`,
+      `Source: ${source === "telegram_miniapp" ? "Telegram Mini App" : "Website"}`,
       `Name: ${inquiry.name}`,
       `Telegram: ${inquiry.telegram_username || "Not provided"}`,
       `Project: ${inquiry.project_type}`,
@@ -60,51 +53,30 @@ export async function POST(request: Request) {
       sent: false,
       reason: "Notification not attempted."
     };
-
     try {
-      notification = await sendInquiryNotification(text);
+      notification = await sendInquiryNotification(messageText);
     } catch (error) {
       notification = {
         sent: false,
-        reason: error instanceof Error
-          ? error.message
-          : "Notification failed."
+        reason: error instanceof Error ? error.message : "Notification failed."
       };
     }
-
     try {
       await sql`
-        INSERT INTO notification_logs (
-          inquiry_id,
-          channel,
-          status,
-          error_message
-        )
+        INSERT INTO notification_logs (inquiry_id, channel, status, error_message)
         VALUES (
-          ${Number(inquiry.id)},
-          'telegram',
+          ${Number(inquiry.id)}, 'telegram',
           ${notification.sent ? "sent" : "failed"},
-          ${notification.sent
-            ? null
-            : (notification.reason || "Notification failed.").slice(0, 500)}
+          ${notification.sent ? null : (notification.reason || "Notification failed.").slice(0, 500)}
         )
       `;
-    } catch {
-      // Inquiry is already saved. Do not fail the client response.
-    }
+    } catch { /* Inquiry is already stored; notification logging must not lose it. */ }
 
-    return NextResponse.json({
-      ok: true,
-      id: inquiry.id,
-      notificationSent: notification.sent
-    });
+    return NextResponse.json({ ok: true, id: inquiry.id, notificationSent: notification.sent });
   } catch (error) {
     console.error("Inquiry submission failed:", error);
-
     return NextResponse.json(
-      {
-        error: "We could not save your inquiry right now. Please try again later or contact us on Telegram."
-      },
+      { error: "We could not save your inquiry right now. Please try again later or contact us on Telegram." },
       { status: 500 }
     );
   }

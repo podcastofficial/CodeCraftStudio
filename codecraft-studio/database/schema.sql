@@ -37,6 +37,9 @@ CREATE TABLE IF NOT EXISTS inquiries (
   project_type VARCHAR(100) NOT NULL,
   budget VARCHAR(100),
   message TEXT NOT NULL,
+  source VARCHAR(30) NOT NULL DEFAULT 'website',
+  telegram_user_id BIGINT,
+  telegram_first_name VARCHAR(150),
   status VARCHAR(30) NOT NULL DEFAULT 'new'
     CHECK (status IN ('new','contacted','in_progress','completed','rejected')),
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -60,6 +63,8 @@ CREATE TABLE IF NOT EXISTS notification_logs (
 
 CREATE INDEX IF NOT EXISTS inquiries_status_created_idx
   ON inquiries(status, created_at DESC);
+CREATE INDEX IF NOT EXISTS inquiries_source_created_idx
+  ON inquiries(source, created_at DESC);
 CREATE INDEX IF NOT EXISTS projects_published_featured_idx
   ON projects(published, featured);
 CREATE INDEX IF NOT EXISTS notification_logs_inquiry_idx
