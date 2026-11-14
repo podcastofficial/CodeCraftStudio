@@ -3,10 +3,18 @@ import { inquirySchema } from "@/lib/validation";
 import { getSql } from "@/lib/db";
 import { sendInquiryNotification } from "@/lib/telegram";
 import { verifyTelegramInitData } from "@/lib/telegram-auth";
+import { clientKey, rateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
+  const limit = await rateLimit(clientKey(request, "inquiry"), 5, 15 * 60);
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { error: "Too many inquiries from this connection. Please try again in a few minutes or message us on Telegram." },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfter) } }
+    );
+  }
   try {
     const body = await request.json();
     const parsed = inquirySchema.safeParse(body);

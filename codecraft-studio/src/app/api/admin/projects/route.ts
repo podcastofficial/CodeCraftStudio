@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { isAdminAuthenticated } from "@/lib/auth";
 import { getSql } from "@/lib/db";
 import { projectSchema } from "@/lib/validation";
@@ -28,6 +29,8 @@ export async function POST(request: Request) {
       VALUES (${p.title}, ${p.slug}, ${p.category || null}, ${p.description || null}, ${p.image_url || null}, ${p.demo_url || null}, ${p.github_url || null}, ${p.technologies}, ${p.featured}, ${p.published})
       RETURNING *
     `;
+    revalidatePath("/miniapp");
+    revalidatePath("/portfolio");
     return NextResponse.json({ project: rows[0] }, { status: 201 });
   } catch (error) {
     console.error(error);

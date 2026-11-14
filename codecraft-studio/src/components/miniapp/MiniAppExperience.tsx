@@ -6,7 +6,8 @@ import {
   Code2, Cpu, Database, Globe2, Layers3, Menu, MessageCircle, MonitorSmartphone,
   Palette, Send, ShieldCheck, Sparkles, Workflow, X, Zap
 } from "lucide-react";
-import { services, starterProjects } from "@/lib/content";
+import { services } from "@/lib/content";
+import type { PublicProject } from "@/lib/projects";
 
 type Section = "home" | "services" | "portfolio" | "about" | "contact";
 const navItems: { id: Section; label: string; icon: typeof Globe2 }[] = [
@@ -19,7 +20,7 @@ const navItems: { id: Section; label: string; icon: typeof Globe2 }[] = [
 const serviceIcons = [Globe2, MonitorSmartphone, Bot, Cpu, Workflow, Database, ShieldCheck, Code2, Zap, Layers3, Palette, Sparkles];
 const categories = ["Websites & Landing Pages", "E-commerce & Marketplaces", "Mobile Apps & PWA", "SaaS Platforms", "Telegram Bots & Mini Apps", "AI Applications", "Blockchain & Web3", "Admin Panels & Dashboards", "CRM, ERP & Business Systems", "Booking & Appointment Platforms", "APIs & Backend Systems", "Business Automation", "Education Platforms", "Fintech Applications", "Custom Software"];
 
-export function MiniAppExperience({ contactUsername = "" }: { contactUsername?: string }) {
+export function MiniAppExperience({ contactUsername = "", projects, projectsAreSamples = false }: { contactUsername?: string; projects: PublicProject[]; projectsAreSamples?: boolean }) {
   const [section, setSection] = useState<Section>("home");
   const [history, setHistory] = useState<Section[]>([]);
   const [telegramUser, setTelegramUser] = useState<{ id: number; first_name?: string; username?: string } | null>(null);
@@ -147,8 +148,8 @@ export function MiniAppExperience({ contactUsername = "" }: { contactUsername?: 
 
         {section === "portfolio" && <section className="miniapp-page-section">
           <div className="miniapp-page-intro"><span className="miniapp-kicker">SELECTED WORK</span><h1>Ideas made <span>real.</span></h1><p>Explore examples of the digital products we work on. Ask us about a different project type or industry.</p></div>
-          <div className="miniapp-project-list">{starterProjects.map((project,index)=><article className="miniapp-project-card" key={project.slug}><div className={`miniapp-project-art art-${index%3}`}><span>{index===0?<Database size={44}/>:index===1?<MonitorSmartphone size={44}/>:<Bot size={44}/>}</span><small>{project.category}</small></div><div className="miniapp-project-copy"><span className="miniapp-kicker">{project.category}</span><h3>{project.title}</h3><p>{project.description}</p><div className="miniapp-tech-tags">{project.technologies.slice(0,3).map((tech)=><span key={tech}>{tech}</span>)}</div><button className="miniapp-text-link" onClick={()=>navigate("contact")}>Discuss a similar project <ArrowRight size={15}/></button></div></article>)}</div>
-          <div className="miniapp-note"><Sparkles size={18}/><p>These are selected starter examples. We’ll publish additional verified case studies and demos as the portfolio grows.</p></div>
+          <div className="miniapp-project-list">{projects.map((project,index)=><article className="miniapp-project-card" key={project.slug}><div className={`miniapp-project-art art-${index%3}`} style={project.image_url?{backgroundImage:`url(${JSON.stringify(project.image_url)})`,backgroundSize:"cover",backgroundPosition:"center"}:undefined}>{!project.image_url&&<span>{index%3===0?<Database size={44}/>:index%3===1?<MonitorSmartphone size={44}/>:<Bot size={44}/>}</span>}<small>{project.category}</small></div><div className="miniapp-project-copy"><span className="miniapp-kicker">{project.category}</span><h3>{project.title}</h3><p>{project.description}</p><div className="miniapp-tech-tags">{project.technologies.slice(0,3).map((tech)=><span key={tech}>{tech}</span>)}</div>{project.demo_url&&<a className="miniapp-text-link" href={project.demo_url} target="_blank" rel="noreferrer">Live demo <ArrowUpRight size={15}/></a>}<button className="miniapp-text-link" onClick={()=>navigate("contact")}>Discuss a similar project <ArrowRight size={15}/></button></div></article>)}</div>
+          {projectsAreSamples&&<div className="miniapp-note"><Sparkles size={18}/><p>These are selected starter examples. We’ll publish additional verified case studies and demos as the portfolio grows.</p></div>}
         </section>}
 
         {section === "about" && <section className="miniapp-page-section">

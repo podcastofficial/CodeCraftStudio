@@ -26,7 +26,7 @@ A Futuristic Blue portfolio and lead-generation website for website development,
 
 This repository is a deployable starter implementation, not a fully configured live service. You must create your own Neon database, Telegram bot, admin credentials and Vercel environment variables. Review the code, test all flows and replace starter portfolio entries with verified project details before advertising.
 
-The initial admin project API supports project creation and listing. Project edit/delete, service CRUD, image upload, richer analytics, rate limiting backed by a shared store, and a full privacy policy are planned follow-up enhancements. Do not describe those features as completed.
+Admin project create, edit, delete and listing are implemented, and the public portfolio reads published projects from the database (starter examples show only while there are none). Rate limiting (5 inquiries / 5 admin logins per 15 min per IP) is stored in PostgreSQL. Service CRUD, image upload, richer analytics and a full privacy policy are still planned. Do not describe those features as completed.
 
 ## 1. Requirements
 
@@ -68,7 +68,7 @@ Copy the printed hash to `ADMIN_PASSWORD_HASH`. Use a strong unique password; do
 1. Create a PostgreSQL project in Neon.
 2. Copy its connection string into `DATABASE_URL`.
 3. Open the Neon SQL Editor.
-4. Run the contents of `database/schema.sql`.
+4. Run the contents of `database/schema.sql`. If the database already exists, run `database/migrations/002_rate_limits.sql` instead (adds the `rate_limits` table).
 
 ## 4. Configure Telegram
 

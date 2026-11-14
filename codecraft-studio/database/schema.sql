@@ -78,3 +78,11 @@ VALUES
  ('Telegram Bot Development','telegram-bot-development','Bots that automate tasks and workflows.','Automation, notifications, tracking and business bots.','◎',3),
  ('Custom Software & APIs','custom-software-apis','Backend systems and integrations.','API integration, database design and automation.','⌘',4)
 ON CONFLICT (slug) DO NOTHING;
+
+-- Rate limiting (also available as database/migrations/002_rate_limits.sql)
+CREATE TABLE IF NOT EXISTS rate_limits (
+  key VARCHAR(120) PRIMARY KEY,
+  window_start TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  count INTEGER NOT NULL DEFAULT 1
+);
+CREATE INDEX IF NOT EXISTS rate_limits_window_idx ON rate_limits(window_start);
