@@ -20,3 +20,15 @@ export async function sendInquiryNotification(message: string) {
   }
   return { sent: true as const };
 }
+
+export async function telegramCall(method: string, body: Record<string, unknown>) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  if (!token) return false;
+  const response = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(body),
+    cache: "no-store"
+  }).catch(() => null);
+  return Boolean(response?.ok);
+}

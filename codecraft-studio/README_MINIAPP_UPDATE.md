@@ -29,5 +29,5 @@ The Mini App sends raw `Telegram.WebApp.initData` to the server. The server veri
 
 - Do not expose `TELEGRAM_BOT_TOKEN` in any `NEXT_PUBLIC_*` variable.
 - The app's Telegram identity verification requires the bot token to be configured.
-- This update does not yet add Telegram webhook command handling; the Mini App can be launched through BotFather's Main Mini App and menu button.
+- Webhook: `/api/telegram/webhook` answers `/start` with an Open App button and forwards other bot messages to your admin chat. Register it with `node --env-file=.env.local scripts/set-webhook.mjs`.
 - Admin pages remain separate and protected by the existing admin authentication. The deployment itself must remain publicly reachable over HTTPS for Telegram to load the Mini App.
