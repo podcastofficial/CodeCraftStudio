@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const allowedPrefixes = ["/miniapp", "/api", "/admin", "/_next"];
+const allowedPrefixes = ["/miniapp", "/api", "/admin", "/_next", "/demos"];
 const allowedExact = new Set(["/robots.txt", "/favicon.ico", "/site.webmanifest"]);
 
 export function middleware(request: NextRequest) {
