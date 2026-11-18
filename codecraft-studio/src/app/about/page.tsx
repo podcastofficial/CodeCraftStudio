@@ -1,5 +1,5 @@
+import { TELEGRAM_URL } from "@/lib/contact";
 import type { Metadata } from "next";
-import Link from "next/link";
 export const metadata: Metadata = { title: "About" };
 
 export default function AboutPage() {
@@ -15,7 +15,7 @@ export default function AboutPage() {
       </div>
       <h2 style={{marginTop:42}}>Industries and use cases</h2>
       <p style={{color:"#64748b",lineHeight:1.9}}>We can discuss digital solutions for retail, education, finance, real estate, travel, logistics, media, communities, professional services, startups and other industries. The exact scope depends on your requirements and applicable technical or regulatory constraints.</p>
-      <p style={{marginTop:30}}><Link className="btn" href="/contact">Tell Us What You Want to Build ↗</Link></p>
+      <p style={{marginTop:30}}><a className="btn" href={TELEGRAM_URL} target="_blank" rel="noreferrer">Tell Us What You Want to Build ↗</a></p>
     </div></section>
   </>;
 }

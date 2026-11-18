@@ -1,6 +1,6 @@
 # CodeCraft Studio Telegram Mini App update
 
-This update adds a Telegram-first Mini App at `/miniapp` and redirects `/` to it. The existing Vercel deployment remains the HTTPS host and backend. The old public marketing routes are not linked from the Mini App; this is not equivalent to making the deployment private because Telegram must be able to load the Mini App URL.
+This update adds a Telegram-first Mini App at `/miniapp` (the `/` homepage is now the full website again; the redirect middleware was removed). The existing Vercel deployment remains the HTTPS host and backend. The old public marketing routes are not linked from the Mini App; this is not equivalent to making the deployment private because Telegram must be able to load the Mini App URL.
 
 ## Files added/changed
 

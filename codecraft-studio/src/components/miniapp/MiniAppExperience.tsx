@@ -1,5 +1,6 @@
 "use client";
 
+import { Logo } from "@/components/Logo";
 import { FormEvent, useEffect, useState } from "react";
 import {
   ArrowRight, ArrowUpRight, Bot, BriefcaseBusiness, Check, ChevronRight,
@@ -102,7 +103,7 @@ export function MiniAppExperience({ contactUsername = "", projects, projectsAreS
     <div className="miniapp-frame">
       <header className="miniapp-header">
         <button className="miniapp-brand" onClick={() => navigate("home")} aria-label="CodeCraft Studio home">
-          <span className="miniapp-logo"><span>{"{ }"}</span><i>✦</i></span>
+          <Logo size={43} idPrefix="ma-hd" />
           <span className="miniapp-brand-copy"><strong>CodeCraft</strong><small>STUDIO</small></span>
         </button>
         <div className="miniapp-header-right">
@@ -117,7 +118,7 @@ export function MiniAppExperience({ contactUsername = "", projects, projectsAreS
         {section === "home" && <>
           <section className="miniapp-hero">
             <div className="miniapp-eyebrow"><span/> DIGITAL DEVELOPMENT STUDIO</div>
-            <div className="miniapp-hero-emblem"><span>{"{ }"}</span><i>✦</i></div>
+            <div className="miniapp-hero-logo"><Logo size={124} idPrefix="ma-hero" /></div>
             <h1>Ideas Into <span>Digital Reality.</span></h1>
             <p>We design and build digital products that help ideas grow — from websites and mobile apps to AI, automation and custom platforms.</p>
             <div className="miniapp-hero-actions">
@@ -154,7 +155,7 @@ export function MiniAppExperience({ contactUsername = "", projects, projectsAreS
 
         {section === "about" && <section className="miniapp-page-section">
           <div className="miniapp-page-intro"><span className="miniapp-kicker">ABOUT CODECRAFT STUDIO</span><h1>Built around <span>your idea.</span></h1><p>We help businesses, creators and teams turn ideas into useful digital products.</p></div>
-          <div className="miniapp-about-panel"><div className="miniapp-about-mark">{"{ ✦ }"}</div><h2>Not limited to one kind of project.</h2><p>Your idea might be a website, an app, an AI tool, a Telegram Mini App, a business platform or something completely new. We start by understanding the problem, then plan a practical way to build it.</p></div>
+          <div className="miniapp-about-panel"><div className="miniapp-about-mark"><Logo size={56} idPrefix="ma-about" /></div><h2>Not limited to one kind of project.</h2><p>Your idea might be a website, an app, an AI tool, a Telegram Mini App, a business platform or something completely new. We start by understanding the problem, then plan a practical way to build it.</p></div>
           <div className="miniapp-process"><span className="miniapp-kicker">HOW WE WORK</span>{[["01","Discover","Understand your idea, users and goals."],["02","Plan","Define scope, features and milestones."],["03","Build","Design, develop and test the solution."],["04","Launch","Deploy and support the release."]].map(([n,title,desc])=><div key={n}><b>{n}</b><section><strong>{title}</strong><p>{desc}</p></section></div>)}</div>
         </section>}
 
@@ -178,7 +179,7 @@ export function MiniAppExperience({ contactUsername = "", projects, projectsAreS
         </section>}
       </div>
 
-      <footer className="miniapp-footer"><div className="miniapp-footer-brand"><span className="miniapp-logo small"><span>{"{ }"}</span><i>✦</i></span><div><strong>CodeCraft Studio</strong><small>IDEAS INTO DIGITAL REALITY</small></div></div><span>Crafted for your next big idea.</span></footer>
+      <footer className="miniapp-footer"><div className="miniapp-footer-brand"><Logo size={35} idPrefix="ma-ft" /><div><strong>CodeCraft Studio</strong><small>IDEAS INTO DIGITAL REALITY</small></div></div><span>Crafted for your next big idea.</span></footer>
       <nav className="miniapp-bottom-nav" aria-label="Mini App navigation">{navItems.map(({id,label,icon:Icon})=><button key={id} className={section===id?"active":""} onClick={()=>navigate(id)}><Icon size={19}/><span>{label}</span></button>)}</nav>
       <div className="miniapp-safe-bottom"/>
     </div>

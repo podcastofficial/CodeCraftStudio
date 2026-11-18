@@ -1,4 +1,4 @@
 User-agent: *
-Disallow: /
-Allow: /miniapp
-Allow: /miniapp/
+Allow: /
+Disallow: /admin
+Disallow: /api

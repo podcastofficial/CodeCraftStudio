@@ -97,3 +97,23 @@ export const starterProjects = [
   { title: "Telegram Mini App", category: "Telegram Mini App", slug: "telegram-mini-app", description: "A Telegram-first application experience with a responsive interface and connected backend workflows.", technologies: ["Telegram Web Apps", "React", "API"], demo_url: "", github_url: "", featured: true },
   { title: "Custom Telegram Bot", category: "Automation", slug: "custom-telegram-bot", description: "A bot workflow concept designed to automate repetitive tasks and deliver useful notifications.", technologies: ["Node.js", "Telegram Bot API", "PostgreSQL"], demo_url: "", github_url: "", featured: true }
 ];
+
+// Prices are in USD. PLACEHOLDER starting prices: edit them to your real rates. Leave empty to show "Custom quote".
+export const packages = [
+  { name: "Starter", price: "From $100", forWho: "Individuals and small businesses that need a clean online presence.", features: ["Responsive landing page or small website", "Contact / inquiry form", "Basic SEO setup", "Deployment on your domain"], featured: false },
+  { name: "Business", price: "From $300", forWho: "Growing businesses, startups and Telegram-first products.", features: ["Multi-page website or Telegram Mini App", "Admin panel for content", "Database and integrations", "Telegram or email notifications", "Post-launch support period"], featured: true },
+  { name: "Custom", price: "From $1,000", forWho: "Complex platforms, SaaS, AI tools and automation systems.", features: ["Requirement workshop and scoping", "Custom backend, APIs and dashboards", "Third-party and payment integrations", "Milestone-based delivery"], featured: false }
+];
+
+export const faqs = [
+  { q: "How do I start a project?", a: "Message us on Telegram with your idea. We review it, ask a few questions and reply with an approach, timeline and quote." },
+  { q: "How much does a project cost?", a: "Prices start from $100 for a simple site and go up with features, integrations and timeline. After understanding your requirements we give a fixed or milestone-based quote in USD before any work begins." },
+  { q: "How long does it take?", a: "A simple website can take days to a couple of weeks. Larger apps and platforms are planned in milestones so you see progress regularly." },
+  { q: "Do you build Telegram bots and Mini Apps?", a: "Yes. Telegram bots, Mini Apps, payment flows and admin dashboards are one of our core services." },
+  { q: "Will I own the code and the project?", a: "Ownership and handover terms are agreed in writing before the project starts." },
+  { q: "Do you provide support after launch?", a: "Yes. We can agree a support or maintenance period for fixes, updates and improvements." }
+];
+
+export type Testimonial = { name: string; role: string; quote: string };
+// Add only real, approved client reviews here. The section stays hidden while this list is empty.
+export const testimonials: Testimonial[] = [];
