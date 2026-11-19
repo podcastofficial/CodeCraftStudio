@@ -33,21 +33,42 @@ export async function POST(request: NextRequest) {
   const buttons: Record<string, unknown>[][] = [];
   if (siteUrl.startsWith("https://")) buttons.push([{ text: "Open CodeCraft Studio ✦", web_app: { url: `${siteUrl}/miniapp` } }]);
   if (TELEGRAM_URL !== "https://t.me/") buttons.push([{ text: "Chat with the team", url: TELEGRAM_URL }]);
+  const reply_markup = buttons.length ? { inline_keyboard: buttons } : undefined;
 
-  if (text.startsWith("/start") || text.startsWith("/help")) {
-    await telegramCall("sendMessage", {
-      chat_id: msg.chat.id,
-      text: "Welcome to CodeCraft Studio — Ideas Into Digital Reality.\n\nWe build websites, Telegram bots & Mini Apps, AI tools and custom software. Open our app to see services and send your project idea.",
-      reply_markup: buttons.length ? { inline_keyboard: buttons } : undefined
-    });
-  } else {
-    await telegramCall("sendMessage", {
-      chat_id: msg.chat.id,
-      text: "Thanks for your message! We have received it and will reply here soon.",
-      reply_markup: buttons.length ? { inline_keyboard: buttons } : undefined
-    });
-    const who = [msg.from?.first_name, msg.from?.username ? `@${msg.from.username}` : null].filter(Boolean).join(" ") || "Unknown";
-    await sendInquiryNotification(`New bot message from ${who} (id ${msg.from?.id ?? msg.chat.id}):\n\n${text.slice(0, 1500) || "[non-text message]"}`);
+  const send = (t: string) =>
+    telegramCall("sendMessage", { chat_id: msg.chat.id, text: t, reply_markup });
+
+  // "/start@Code_Craft_Studio_Bot arg" -> "/start"
+  const command = text.startsWith("/") ? text.split(/\s+/)[0].split("@")[0].toLowerCase() : null;
+
+  switch (command) {
+    case "/start":
+      await send("Welcome to CodeCraft Studio — Ideas Into Digital Reality.\n\nWe build websites, Telegram bots & Mini Apps, AI tools and custom software. Open our app to see services and send your project idea.\n\nType /help to see all commands.");
+      break;
+    case "/help":
+      await send("CodeCraft Studio — available commands:\n\n/start - Main menu\n/services - What we build\n/pricing - How pricing works\n/portfolio - Our work\n/contact - Talk to the team\n/help - This message");
+      break;
+    case "/services":
+      await send("What we build:\n\n🌐 Websites\n🤖 Telegram Bots\n📱 Telegram Mini Apps\n📲 Mobile Apps\n🧠 AI Tools\n💻 Custom Software\n\nOpen the app below for details, or send us your idea with /contact.");
+      break;
+    case "/pricing":
+      await send("Pricing depends on scope and features. Open the app to see our packages, or message the team with your idea and we will send a quote.");
+      break;
+    case "/portfolio":
+      await send("See our recent projects and demos inside the app — tap \"Open CodeCraft Studio\" below.");
+      break;
+    case "/contact":
+      await send("Tell us about your project. Just type your idea here, or tap \"Chat with the team\" below. We reply as soon as possible.");
+      break;
+    default:
+      if (command) {
+        // Unknown command: still respond clearly.
+        await send("Sorry, I don't know that command.\n\nUse /help to see what I can do.");
+      } else {
+        await send("Thanks for your message! We have received it and will reply here soon.\n\nUse /help to see all commands.");
+        const who = [msg.from?.first_name, msg.from?.username ? `@${msg.from.username}` : null].filter(Boolean).join(" ") || "Unknown";
+        await sendInquiryNotification(`New bot message from ${who} (id ${msg.from?.id ?? msg.chat.id}):\n\n${text.slice(0, 1500) || "[non-text message]"}`);
+      }
   }
   return NextResponse.json({ ok: true });
 }
